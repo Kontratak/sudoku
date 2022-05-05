@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sudoku_flutter/widgets/button_general.dart';
-import 'package:uuid/uuid.dart';
+import '../extensions.dart';
+import '../widgets/button_general.dart';
 
 import '../controllers/home_controller.dart';
 
-class Dialogs{
+class Dialogs {
+  static HomeController _controller = Get.find(tag: "HOME");
 
-  static HomeController _controller = Get.find(tag : "HOME");
-
-  static newGameDialog(context) async{
-    var uuid = Uuid().v4();
-    _controller.textEditingController.text = "New_Game_$uuid";
+  static newGameDialog(context) async {
+    _controller.textEditingController.text = _controller.generateGameName();
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -23,14 +21,20 @@ class Dialogs{
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 TextField(
-                  onSubmitted: (value) async{
+                  onSubmitted: (value) async {
                     await _controller.newGame(value);
                   },
                   controller: _controller.textEditingController,
                 ),
-                ButtonGeneral(onTap: () async {
-                  await _controller.newGame(_controller.textEditingController.text);
-                },text: "Create New Game",color: Colors.blue,)
+                ButtonGeneral(
+                  onTap: () async {
+                    await _controller
+                        .newGame(_controller.textEditingController.text);
+                  },
+                  widget:
+                      Text("Create New Game", style: TextStyle(fontSize: 20)),
+                  color: Colors.blue,
+                )
               ],
             ),
           ),
@@ -39,7 +43,7 @@ class Dialogs{
     );
   }
 
-  static loadGameDialog(context) async{
+  static loadGameDialog(context) async {
     await _controller.loadGames();
     await showDialog(
       context: context,
@@ -52,10 +56,27 @@ class Dialogs{
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Expanded(child: ListView.builder(
+                Expanded(
+                    child: ListView.builder(
                   itemCount: _controller.games.length,
-                  itemBuilder: (BuildContext context,int index){
-                    return ListTile(title: Text(_controller.games[_controller.games.length - index -1].name));
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(_controller
+                          .games[_controller.games.length - index - 1].name),
+                      onTap: () async{
+                        await _controller.loadGame(_controller
+                            .games[_controller.games.length - index - 1]);
+                      },
+                      leading: Image.asset("logo.png".getAssetImage),
+                      trailing: IconButton(
+                        icon: Icon(Icons.remove,color: Colors.red,),
+                        onPressed: () async{
+                          _controller.removeGame(_controller.games[_controller.games.length - index - 1]);
+                        },
+                      ),
+                    );
                   },
                 ))
               ],
@@ -65,5 +86,4 @@ class Dialogs{
       },
     );
   }
-
 }

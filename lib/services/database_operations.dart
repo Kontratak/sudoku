@@ -20,7 +20,7 @@ class DatabaseOperations{
   }
 
   static Future<String> addGame(String name) async{
-    var uuid = Uuid().v4();
+    var uuid = Uuid().v1();
     _gameBox.add(Game(uuid,name));
     await addCells(uuid);
     return uuid;

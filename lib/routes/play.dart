@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_flutter/controllers/play_controller.dart';
+import 'package:sudoku_flutter/widgets/button_general.dart';
 
 import '../widgets/cell.dart';
 
@@ -15,7 +16,7 @@ class Play extends StatelessWidget {
       backgroundColor: Colors.blue,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 20,left: 4,right: 4),
+          padding: const EdgeInsets.only(top: 20, left: 4, right: 4),
           child: Column(
             children: [
               SizedBox(
@@ -24,37 +25,62 @@ class Play extends StatelessWidget {
                 child: GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 45,
-                        childAspectRatio: 0.9,
-                        crossAxisSpacing: 0,
-                        mainAxisSpacing: 0),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 45,
+                            childAspectRatio: 0.9,
+                            crossAxisSpacing: 0,
+                            mainAxisSpacing: 0),
                     itemCount: _controller.cells.length,
                     itemBuilder: (BuildContext ctx, i) {
                       return Obx(() => InkWell(
-                          onTap: (){
-                            if(_controller.cells[i].isModifiable)
+                          onTap: () {
+                            if (_controller.cells[i].isModifiable)
                               _controller.setSelectedLocation(i);
                           },
-                          child: Cell(number: _controller.cells[i].number,index : i,
-                            isSelected: _controller.selectedIndex.value != -1 && i == _controller.selectedIndex.value,
-                            isModifiable: _controller.cells[i].isModifiable,isCollided : _controller.isCollided(_controller.cells[i].location))));
-                    }
-                ),
+                          child: Cell(
+                              number: _controller.cells[i].number,
+                              index: i,
+                              isSelected:
+                                  _controller.selectedIndex.value != -1 &&
+                                      i == _controller.selectedIndex.value,
+                              isModifiable: _controller.cells[i].isModifiable,
+                              isCollided: _controller
+                                  .isCollided(_controller.cells[i].location))));
+                    }),
+              ),
+              Row(
+                children: [
+                  ButtonGeneral(
+                    onTap: () {
+                      _controller.historyBack();
+                    },
+                    widget: Icon(Icons.arrow_back),
+                  ),
+                  ButtonGeneral(
+                    onTap: () {
+                      _controller.historyForward();
+                    },
+                    widget: Icon(Icons.arrow_forward),
+                  ),
+                ],
               ),
               SizedBox(
                 width: Get.width,
                 height: Get.width * 0.1,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-
                   itemCount: _controller.numbers.length,
-                  itemBuilder: (BuildContext context,int index){
+                  itemBuilder: (BuildContext context, int index) {
                     return InkWell(
-                        onTap: (){
-                          _controller.setNumberOnLocation(_controller.numbers[index]);
+                        onTap: () {
+                          _controller
+                              .setNumberOnLocation(_controller.numbers[index]);
                         },
-                        child: Cell(number: _controller.numbers[index].toString(),index : index,isModifiable: false));
+                        child: Cell(
+                            number: _controller.numbers[index].toString(),
+                            index: index,
+                            isModifiable: false));
                   },
                 ),
               ),
@@ -64,7 +90,4 @@ class Play extends StatelessWidget {
       ),
     );
   }
-
-
-
 }

@@ -18,9 +18,9 @@ class Home extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ButtonGeneral(onTap: () async=> await Dialogs.newGameDialog(context),color: Colors.red,text: "New Game",),
-            ButtonGeneral(onTap: () async=> await Dialogs.loadGameDialog(context),color: Colors.green,text: "Load Game",),
-            ButtonGeneral(onTap: () async=> _controller.quit(),color: Colors.red,text: "Quit",),
+            ButtonGeneral(onTap: () async=> await Dialogs.newGameDialog(context),color: Colors.red,widget: Text("New Game",style: TextStyle(fontSize: 20)),),
+            ButtonGeneral(onTap: () async=> await Dialogs.loadGameDialog(context),color: Colors.green,widget: Text("Load Game",style: TextStyle(fontSize: 20)),),
+            ButtonGeneral(onTap: () async=> _controller.quit(),color: Colors.red,widget: Text("Quit",style: TextStyle(fontSize: 20)),),
           ],
         ),
       ),

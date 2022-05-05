@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ButtonGeneral extends StatelessWidget {
-  ButtonGeneral({Key? key,required this.onTap, this.text, this.color}) : super(key: key);
+  ButtonGeneral({Key? key,required this.onTap, this.widget, this.color}) : super(key: key);
 
   final dynamic onTap;
-  final String? text;
+  final Widget? widget;
   final Color? color;
 
   @override
@@ -23,7 +23,7 @@ class ButtonGeneral extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(text ?? "Error",style: TextStyle(fontSize: 20),),
+            child: widget ??  Text("Error",style: TextStyle(fontSize: 20),),
           ),
         ),
       ),
